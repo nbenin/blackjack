@@ -1,10 +1,14 @@
 <?php
-// Yes
-declare(strict_types=1);
 // Base blackjack class
-class Blackjack {
+class Blackjack
+{
+    function __construct($score = '0')
+    {
+        $this->score = $score;
 
+    }
+    public function getScore() {
+        return $this->score;
+    }
 }
 
-require 'game.php';
-require 'index.php';
