@@ -15,33 +15,70 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // If coming from home page, initialize new players
     if (isset($_POST['startGame'])) {
-        $playerScore = $Player->firstTwo();
-        $dealerScore = $Dealer->firstTwo();
-        $_SESSION['playerScore'] = $playerScore;
-        $_SESSION['dealerScore'] = $dealerScore;
+
+        // Set player score
+        $playerFirstHand = $Player->firstTwo();
+        echo 'Player started with a ' . $playerFirstHand[0] . ' and a ' . $playerFirstHand[1] . '<br>';
+
+        // Set dealer score
+        $dealerFirstHand = $Dealer->firstTwo();
+        echo 'Dealer started with a ' . $dealerFirstHand[0] . ' and a ' . $dealerFirstHand[1] . '<br>';
+
+        // Store in session
+        $_SESSION['playerScore'] = $Player->score;
+        $_SESSION['dealerScore'] = $Dealer->score;
     }
 
     // If game buttons pressed, check session for scores
     if (isset($_SESSION['playerScore'])) {
-        $playerScore = $_SESSION['playerScore'];
-        $dealerScore = $_SESSION['dealerScore'];
+        $Player->score = $_SESSION['playerScore'];
+        $Dealer->score = $_SESSION['dealerScore'];
     }
 
     // If player hits
     if (isset($_POST['playerHit'])) {
-        $playerScore = $Player->hit($playerScore);
-        $_SESSION['playerScore'] = $playerScore;
+        $playerHit = $Player->hit($Player->score);
+        echo 'Player hit with a ' . $playerHit . '<br>';
+
+        // Check if player bust or not
+        if ($Player->score > 21) {
+            youLose();
+        }
+        $_SESSION['playerScore'] = $Player->score;
+
     }
 
     // If player stands
     if (isset($_POST['playerStand'])) {
-        echo 'stand';
+        while ($Dealer->score <= 15) {
+            $dealerHit = $Dealer->hit($Dealer->score);
+            echo 'Dealer hit with a ' . $dealerHit . '<br>';
+            $_SESSION['dealerScore'] = $Dealer->score;
+        }
+
+        // Check if dealer bust
+        if ($Dealer->score > 21) {
+            youWin();
+        }
+
+        // Compare scores after player stands
+        if ($Player->score <= $Dealer->score) {
+            youLose();
+        } else {
+            youWin();
+        }
     }
 
     // If player surrenders
     if (isset($_POST['playerSurrender'])) {
-        echo 'Never Surrender';
+        youLose();
     }
+}
+function youWin() {
+    echo 'Winner!';
+}
+function youLose() {
+    echo 'Loser.';
 }
 ?>
 
@@ -57,8 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
 <div class='container'>
-    <p>Player score is: <?php echo $playerScore?></p>
-    <p>Dealer score is: <?php echo $dealerScore?></p>
+    <p>Player score is: <?php echo $Player->score?></p>
+    <p>Dealer score is: <?php echo $Dealer->score?></p>
 </div>
 <form method="POST">
     <button type="submit" name="playerHit">Hit</button>

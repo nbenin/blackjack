@@ -11,13 +11,17 @@ class Blackjack
 
     // Game start method
     public function firstTwo() {
-        return(rand(1, 11) + rand(1, 10));
+        $cardOne = rand(1, 11);
+        $cardTwo = rand(1, 10);
+        $this->score = $cardOne + $cardTwo;
+        return [$cardOne, $cardTwo];
     }
 
     // Hit method
     public function hit($currentScore) {
         $randomCard = rand(1, 11);
-        return $currentScore + $randomCard;
+        $this->score = $currentScore + $randomCard;
+        return $randomCard;
     }
 }
 
