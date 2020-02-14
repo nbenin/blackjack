@@ -18,11 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Set player score
         $playerFirstHand = $Player->firstTwo();
-        echo 'Player started with a ' . $playerFirstHand[0] . ' and a ' . $playerFirstHand[1] . '<br>';
+        $gameMessage1 = 'Player started with a ' . $playerFirstHand[0] . ' and a ' . $playerFirstHand[1] . '<br>';
 
         // Set dealer score
-        $dealerFirstHand = $Dealer->firstTwo();
-        echo 'Dealer started with a ' . $dealerFirstHand[0] . ' and a ' . $dealerFirstHand[1] . '<br>';
+        $dealerFirstHand = $Dealer->dealerHit();
+        $gameMessage2 = 'Dealer started with a ' . $dealerFirstHand . '<br>';
 
         // Store in session
         $_SESSION['playerScore'] = $Player->score;
@@ -37,8 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // If player hits
     if (isset($_POST['playerHit'])) {
-        $playerHit = $Player->hit();
-        echo 'Player hit with a ' . $playerHit . '<br>';
+        $playerHit = $Player->playerHit();
+        $gameMessage1 = 'Player hit with a ' . $playerHit . '<br>';
+        $gameMessage2 = 'Dealer started with a ' . $Dealer->score;
         $_SESSION['playerScore'] = $Player->score;
     }
 
@@ -46,10 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['playerStand'])) {
 
         // Pass Player score into method and let dealer go
-        $dealerHits = $Dealer->stand($Player->score);
-        foreach($dealerHits as $cards) {
-            echo 'Dealer hit with a ' . $cards . '<br>';
-        }
+        $Dealer->stand($Player->score);
         $_SESSION['dealerScore'] = $Dealer->score;
     }
 
@@ -67,22 +65,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="main.css">
     <title>Document</title>
 </head>
 <body>
-<div class='container'>
+<div id="background">
+    <form id="gameButtons" method="POST">
+        <p><?php echo $gameMessage1 ?></p>
+        <p><?php echo $gameMessage2 ?></p>
+        <button type="submit" id="playerHit" name="playerHit">Hit</button>
+        <button type="submit" id="playerStand" name="playerStand">Stand</button>
+        <button type="submit" id="playerSurrender" name="playerSurrender">Surrender</button>
+    </form>
+</div>
+<div id="scores">
     <p>Player score is: <?php echo $Player->score?></p>
     <p>Dealer score is: <?php echo $Dealer->score?></p>
 </div>
-<form method="POST">
-    <button type="submit" name="playerHit">Hit</button>
-    <button type="submit" name="playerStand">Stand</button>
-    <button type="submit" name="playerSurrender">Surrender</button>
-</form>
-<br><br><br><br><br>
-<form method="POST" action="index.php">
+<form id="goHome" method="POST" action="index.php">
     <button type="submit" name="home">Go Home</button>
 </form>
-
 </body>
 </html>

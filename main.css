@@ -1,0 +1,26 @@
+body, html {
+    text-align: center;
+}
+h1, h3 {
+    text-align: center;
+}
+#startButton {
+    text-align: center;
+}
+#startGame {
+    height: 20vh;
+    width: 20vw;
+    font-size: xx-large;
+}
+#scores {
+    margin-top: 20vh;
+    font-size: x-large;
+}
+#playerHit, #playerStand, #playerSurrender {
+    height: 10vh;
+    width: 10vw;
+    font-size: large;
+}
+#goHome {
+    margin-top: 15vh;
+}

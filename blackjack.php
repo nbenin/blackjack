@@ -17,15 +17,26 @@ class Blackjack
         return [$cardOne, $cardTwo];
     }
 
-    // Hit method
-    public function hit() {
+    // Player hit method
+    public function playerHit() {
         $randomCard = rand(1, 11);
         $this->score += $randomCard;
 
         // Check for player bustin
         if($this->score > 21) {
-            echo '<script>alert("You Lose!");</script>';
-            header('Location: blackjack.local/');
+            $this->alert('Lose! You busted with a ' . $this->score);
+        }
+        return $randomCard;
+    }
+
+    // Dealer hit method
+    public function dealerHit() {
+        $randomCard = rand(1, 11);
+        $this->score += $randomCard;
+
+        // Check for player bustin
+        if($this->score > 21) {
+            $this->alert('Win! Dealer busted with a ' . $this->score);
         }
         return $randomCard;
     }
@@ -34,16 +45,14 @@ class Blackjack
     public function stand($playerScore) {
         $dealerHits = [];
         while($this->score <= 15) {
-            array_push($dealerHits, $this->hit());
+            array_push($dealerHits, $this->dealerHit());
         }
 
         // check for dealer bustin
         if ($this->score >= $playerScore) {
-            echo '<script>alert("You Lose!");</script>';
-            header('Location: blackjack.local/');
+            $this->alert('Lose! Dealer had ' . $this->score . ' and you had ' . $playerScore);
         } else {
-            echo '<script>alert("You Win!");</script>';
-            header('Location: blackjack.local/');
+            $this->alert('Win! Dealer had ' . $this->score . ' and you had ' . $playerScore);
         }
 
         return $dealerHits;
@@ -51,8 +60,12 @@ class Blackjack
 
     // Surrender method
     public function surrender() {
-        echo '<script>alert("You Lose!");</script>';
-        header('Location: blackjack.local/');
+        $this->alert("Lose! You didn't even try!");
+    }
+
+    // Win lose alert function (using some cheeky javascript sorry!)
+    public function alert($message) {
+        echo '<script type="text/javascript">window.alert("You ' . $message . '");window.location.href="/";</script>';
     }
 }
 
