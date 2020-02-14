@@ -24,7 +24,7 @@ class Blackjack
 
         // Check for player bustin
         if($this->score > 21) {
-            $this->alert('Lose! You busted with a ' . $this->score);
+            $this->alert('Lose! You drew a ' . $randomCard . ' and went bust with ' . $this->score);
         }
         return $randomCard;
     }
@@ -34,9 +34,9 @@ class Blackjack
         $randomCard = rand(1, 11);
         $this->score += $randomCard;
 
-        // Check for player bustin
+        // Check for dealer bustin
         if($this->score > 21) {
-            $this->alert('Win! Dealer busted with a ' . $this->score);
+            $this->alert('Win! Dealer drew a ' . $randomCard . ' and went bust with ' . $this->score);
         }
         return $randomCard;
     }
@@ -50,9 +50,9 @@ class Blackjack
 
         // check for dealer bustin
         if ($this->score >= $playerScore) {
-            $this->alert('Lose! Dealer had ' . $this->score . ' and you had ' . $playerScore);
+            $this->alert('Lose! Dealer has ' . $this->score . ' and you have ' . $playerScore);
         } else {
-            $this->alert('Win! Dealer had ' . $this->score . ' and you had ' . $playerScore);
+            $this->alert('Win! Dealer has ' . $this->score . ' and you have ' . $playerScore);
         }
 
         return $dealerHits;
