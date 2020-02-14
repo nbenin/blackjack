@@ -37,51 +37,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // If player hits
     if (isset($_POST['playerHit'])) {
-        $playerHit = $Player->hit($Player->score);
+        $playerHit = $Player->hit();
         echo 'Player hit with a ' . $playerHit . '<br>';
-
-        // Check if player bust or not
-        if ($Player->score > 21) {
-            youLose();
-        }
         $_SESSION['playerScore'] = $Player->score;
-
     }
 
     // If player stands
     if (isset($_POST['playerStand'])) {
-        while ($Dealer->score <= 15) {
-            $dealerHit = $Dealer->hit($Dealer->score);
-            echo 'Dealer hit with a ' . $dealerHit . '<br>';
-            $_SESSION['dealerScore'] = $Dealer->score;
-        }
 
-        // Check if dealer bust
-        if ($Dealer->score > 21) {
-            youWin();
+        // Pass Player score into method and let dealer go
+        $dealerHits = $Dealer->stand($Player->score);
+        foreach($dealerHits as $cards) {
+            echo 'Dealer hit with a ' . $cards . '<br>';
         }
-
-        // Compare scores after player stands
-        if ($Player->score <= $Dealer->score) {
-            youLose();
-        } else {
-            youWin();
-        }
+        $_SESSION['dealerScore'] = $Dealer->score;
     }
 
     // If player surrenders
     if (isset($_POST['playerSurrender'])) {
-        youLose();
+        $Player->surrender();
     }
 }
-function youWin() {
-    echo 'Winner!';
-}
-function youLose() {
-    echo 'Loser.';
-}
 ?>
-
 
 <!doctype html>
 <html lang="en">

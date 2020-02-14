@@ -8,8 +8,10 @@
     <title>Document</title>
 </head>
 <body>
+
 <form method="POST" action="game.php">
     <button type="submit" name="startGame">Start Game</button>
 </form>
+
 </body>
 </html>
