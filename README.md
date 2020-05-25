@@ -1,3 +1,4 @@
-# blackjack with OOP
+# Blackjack with OOP
 
-- Making blackjack with our first time using OOP
+- Practicing OOP principles by making a blackjack style game
+- Expected functionality working 
